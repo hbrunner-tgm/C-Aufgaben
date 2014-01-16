@@ -22,7 +22,7 @@ uint8_t ButtonsPoll(uint8_t *, uint8_t *);
 
 
 /*
-  Name of file: main_button_while.
+  Name of file: main_button_while.c
   Author: Helmuth Brunner
   Version: 1.0
   Describtion: A program for the tiva-launchpad. If you press one of the buttons the rgb-LED will change the color.

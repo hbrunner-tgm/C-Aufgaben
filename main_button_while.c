@@ -73,69 +73,70 @@ int main() {
 
 	return 0;
 }
-//Method ButtonsPoll() from buttons.h
-	uint8_t
-	ButtonsPoll(uint8_t *pui8Delta, uint8_t *pui8RawState) {
 
-		uint32_t ui32Delta;
-		uint32_t ui32Data;
-    		static uint8_t ui8SwitchClockA = 0;
-    		static uint8_t ui8SwitchClockB = 0;
+//Method ButtonsPoll() from buttons.h
+
+uint8_t
+ButtonsPoll(uint8_t *pui8Delta, uint8_t *pui8RawState) {
+	uint32_t ui32Delta;
+	uint32_t ui32Data;
+  	static uint8_t ui8SwitchClockA = 0;
+    	static uint8_t ui8SwitchClockB = 0;
 
     //
     // Read the raw state of the push buttons.  Save the raw state
     // (inverting the bit sense) if the caller supplied storage for the
     // raw value.
     //
-    		ui32Data = (ROM_GPIOPinRead(BUTTONS_GPIO_BASE, ALL_BUTTONS));
-    		if(pui8RawState)
-    		{
-        		*pui8RawState = (uint8_t)~ui32Data;
-    		}
+    	ui32Data = (ROM_GPIOPinRead(BUTTONS_GPIO_BASE, ALL_BUTTONS));
+    	if(pui8RawState)
+    	{
+        	*pui8RawState = (uint8_t)~ui32Data;
+    	}
 
     //
     // Determine the switches that are at a different state than the debounced
     // state.
     //
-    		ui32Delta = ui32Data ^ g_ui8ButtonStates;
+    	ui32Delta = ui32Data ^ g_ui8ButtonStates;
 
     //
     // Increment the clocks by one.
     //
-    		ui8SwitchClockA ^= ui8SwitchClockB;
-    		ui8SwitchClockB = ~ui8SwitchClockB; 
+    	ui8SwitchClockA ^= ui8SwitchClockB;
+    	ui8SwitchClockB = ~ui8SwitchClockB; 
 
     //
     // Reset the clocks corresponding to switches that have not changed state.
     //
-    		ui8SwitchClockA &= ui32Delta;
-    		ui8SwitchClockB &= ui32Delta;
+    	ui8SwitchClockA &= ui32Delta;
+    	ui8SwitchClockB &= ui32Delta;
 
     //
     // Get the new debounced switch state.
     //
-    		g_ui8ButtonStates &= ui8SwitchClockA | ui8SwitchClockB;
-    		g_ui8ButtonStates |= (~(ui8SwitchClockA | ui8SwitchClockB)) & ui32Data;
+    	g_ui8ButtonStates &= ui8SwitchClockA | ui8SwitchClockB;
+    	g_ui8ButtonStates |= (~(ui8SwitchClockA | ui8SwitchClockB)) & ui32Data;
 
     //
     // Determine the switches that just changed debounced state.
     //
-    		ui32Delta ^= (ui8SwitchClockA | ui8SwitchClockB);
+    	ui32Delta ^= (ui8SwitchClockA | ui8SwitchClockB);
 
     //
     // Store the bit mask for the buttons that have changed for return to
     // caller.
     //
-   		if(pui8Delta)
-    		{
-        		*pui8Delta = (uint8_t)ui32Delta;
-    		}
+   	if(pui8Delta)
+    	{
+        	*pui8Delta = (uint8_t)ui32Delta;
+    	}
 
     //
     // Return the debounced buttons states to the caller.  Invert the bit
     // sense so that a '1' indicates the button is pressed, which is a
     // sensible way to interpret the return value.
     //
-    		return(~g_ui8ButtonStates);
+    	return(~g_ui8ButtonStates);
 
-	}
+}

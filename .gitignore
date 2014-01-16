@@ -16,3 +16,15 @@
 *.exe
 *.out
 *.app
+
+# Files die nicht von mir sind
+blink.c
+button_bspl.c
+buttons.c
+gpio_jtag.c
+hello.c
+rgb.c
+startup_main.c
+startup_systick.c
+uartstdio.c
+

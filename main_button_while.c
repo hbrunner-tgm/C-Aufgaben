@@ -19,7 +19,7 @@
 
 static uint8_t g_ui8ButtonStates = ALL_BUTTONS;
 uint8_t ButtonsPoll(uint8_t *, uint8_t *);
-
+uint8_t led_switch;
 
 /*
   Name of file: main_button_while.c
@@ -51,7 +51,7 @@ int main() {
 	g_ui8ButtonStates = ROM_GPIOPinRead(BUTTONS_GPIO_BASE, ALL_BUTTONS);
 
 	for(;;) {
-
+		/*
 		ui8Buttons = ButtonsPoll(&ui8ButtonsChanged, 0);
 
 		if(BUTTON_PRESSED(LEFT_BUTTON, ui8Buttons, ui8ButtonsChanged))
@@ -68,6 +68,15 @@ int main() {
 		{
 			ROM_GPIOPinWrite(GPIO_PORTF_BASE, LED_RED|LED_GREEN|LED_BLUE, 0);
 		}//If the buttons will be release the LED turn off.
+		
+		*/
+		
+		//----Wenn beide Buttons gedrueckt werden leuchten auch ---
+		ui8Buttons = (uint8_t)~ROM_GPIOPinRead(BUTTONS_GPIO_BASE, ALL_BUTTONS);
+		led_switch = 0;
+		if(LEFT_BUTTON & ui8Buttons) led_switch |= LED_RED;
+		if(RIGHT_BUTTON & ui8Buttons) led_switch |= LED_GREEN;
+		ROM_GPIOPinWrite(GPIO_PORTF_BASE, LED_RED|LED_GREEN|LED_BLUE, led_switch);
 
 	}
 
